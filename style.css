@@ -1,0 +1,114 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    background: #f4f7fa;
+    color: #333;
+  }
+  
+  header {
+    background: #005f73;
+    color: #fff;
+    padding: 40px 20px;
+    text-align: center;
+  }
+  
+  header img {
+    max-width: 600px;
+    width: 100%;
+    height: auto;
+    margin-top: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
+  
+  header button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background: #0a9396;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  section {
+    padding: 40px 20px;
+    max-width: 900px;
+    margin: auto;
+  }
+  
+  h2 {
+    color: #005f73;
+    margin-bottom: 20px;
+  }
+  
+  .module {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  
+  .module img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-top: 10px;
+  }
+  
+  #gamification {
+    text-align: center;
+  }
+  
+  #gamification button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background: #ee9b00;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  #gamification img {
+    margin-top: 20px;
+    width: 150px;
+    border-radius: 8px;
+  }
+  
+  #contact form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 500px;
+    margin: auto;
+  }
+  
+  #contact input, #contact textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  
+  #contact button {
+    padding: 10px;
+    background: #94d2bd;
+    border: none;
+    color: #000;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  #contact img {
+    max-width: 500px;
+    width: 100%;
+    display: block;
+    margin: 30px auto 0;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  

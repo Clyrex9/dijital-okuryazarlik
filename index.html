@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dijital Okuryazarlık Eğitimi</title>
+  <link rel="stylesheet" href="style.css"/>
+  <script src="script.js" defer></script>
+</head>
+<body>
+
+  <header>
+    <h1>Dijital Okuryazarlık Eğitimi</h1>
+    <p>10-18 yaş arası bireyler için oyun tabanlı dijital okuryazarlık tanıtımı</p>
+    <img src="images/header.png" alt="Dijital eğitim görseli" style="max-width: 100%; height: auto; border-radius: 12px; margin-top: 20px;" />
+    <br>
+    <button onclick="scrollToModules()">Keşfet</button>
+  </header>
+
+  <section id="modules">
+    <h2>Eğitim Modülleri</h2>
+
+    <div class="module">
+      <h3>Siber Güvenlik</h3>
+      <p>Güçlü şifreler oluşturma, hesap güvenliği, zararlı yazılımlar hakkında bilgi.</p>
+      <img src="images/cybersecurity.png" alt="Siber güvenlik görseli" style="width:100%; border-radius: 10px;" />
+    </div>
+
+    <div class="module">
+      <h3>Dijital Ayak İzi</h3>
+      <p>İnternette bıraktığınız izleri takip edin, gizliliğinizi koruyun.</p>
+      <img src="images/footprint.png" alt="Dijital ayak izi görseli" style="width:100%; border-radius: 10px;" />
+    </div>
+
+    <div class="module">
+      <h3>Bilgi Doğrulama</h3>
+      <p>Doğru bilgiye ulaşma, yanlış ve yalan haberleri ayırt etme becerisi.</p>
+      <img src="images/fact-check.png" alt="Doğru bilgi görseli" style="width:100%; border-radius: 10px;" />
+    </div>
+
+    <div class="module">
+      <h3>Gizlilik ve Şifreleme</h3>
+      <p>Verilerinizi nasıl korursunuz, gizlilik ayarlarını nasıl yaparsınız?</p>
+      <img src="images/privacy.png" alt="Gizlilik görseli" style="width:100%; border-radius: 10px;" />
+    </div>
+  </section>
+
+  <section id="gamification">
+    <h2>Oyunlaştırma</h2>
+    <p>Her etkileşimde puan kazan! Dijital dünyada ne kadar bilinçlisin?</p>
+    <button onclick="earnPoint()">Puan Kazan</button>
+    <div id="score">Puan: 0</div>
+    <img src="images/badge.png" alt="Rozet görseli" style="margin-top: 20px; width: 150px; border-radius: 8px;" />
+  </section>
+
+  <section id="contact">
+    <h2>Görüş Bildir</h2>
+    <p>Geri bildirimlerinizi bizimle paylaşın!</p>
+    <form>
+      <input type="text" placeholder="Adınız" required />
+      <input type="email" placeholder="E-posta" required />
+      <textarea rows="4" placeholder="Mesajınız"></textarea>
+      <button type="submit">Gönder</button>
+    </form>
+    <img src="images/contact.png" alt="İletişim görseli" style="margin-top: 20px; width: 100%; border-radius: 12px;" />
+  </section>
+
+</body>
+</html>
