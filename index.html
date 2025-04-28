@@ -46,11 +46,125 @@
   </section>
 
   <section id="gamification">
-    <h2>Oyunlaştırma</h2>
-    <p>Her etkileşimde puan kazan! Dijital dünyada ne kadar bilinçlisin?</p>
-    <button onclick="earnPoint()">Puan Kazan</button>
-    <div id="score">Puan: 0</div>
-    <img src="images/badge.png" alt="Rozet görseli" style="margin-top: 20px; width: 150px; border-radius: 8px;" />
+    <h2>Emoji Word Match Game</h2>
+    <div id="score">Score: 0</div>
+    <div id="level">Level: 1</div>
+    <div class="section" id="emoji-section"></div>
+    <div class="section" id="word-section"></div>
+    <div id="result">Good job!</div>
+    <button id="restartBtn" onclick="restartGame()">Play Again</button>
+    <style>
+      .section { margin-top: 20px; }
+      .item { display: inline-block; margin: 10px; padding: 10px 20px; border: 2px solid #ccc; border-radius: 10px; cursor: pointer; font-size: 24px; }
+      .selected { border-color: blue; background-color: #eef; }
+      .correct { background-color: #8f8 !important; border-color: green !important; }
+      #result { margin-top: 30px; font-size: 24px; display: none; }
+      #score, #level { font-size: 20px; margin: 10px; }
+      #restartBtn { display: none; margin-top: 20px; padding: 10px 20px; font-size: 18px; cursor: pointer; }
+    </style>
+    <script>
+      const levels = [
+        { pairs: { '🛡️': 'güvenlik', '🔒': 'şifre', '👣': 'dijital ayak izi' } },
+        { pairs: { '📰': 'haber', '🕵️‍♂️': 'doğrulama', '🌐': 'internet' } },
+        { pairs: { '👤': 'gizlilik', '💻': 'bilgisayar', '📧': 'e-posta' } },
+        { pairs: { '📱': 'akıllı telefon', '🧑‍💻': 'siber güvenlik', '🔍': 'araştırma' } },
+        { pairs: { '📷': 'fotoğraf', '🗑️': 'çöp', '🧑‍🎓': 'eğitim' } },
+        { pairs: { '🔗': 'bağlantı', '📊': 'veri', '🧑‍⚖️': 'etik' } },
+        { pairs: { '🛑': 'tehlike', '❓': 'soru', '🗝️': 'anahtar' } },
+        { pairs: { '💬': 'mesaj', '🖼️': 'görsel', '📂': 'dosya' } },
+        { pairs: { '📢': 'paylaşım', '🧑‍🏫': 'bilgilendirme', '🧑‍🤝‍🧑': 'topluluk' } },
+        { pairs: { '🔎': 'arama', '🧑‍🔬': 'analiz', '🧑‍🚀': 'keşif' } }
+      ];
+      let currentLevel = 0;
+      let selected = null;
+      let score = 0;
+      let matched = {};
+      function shuffle(arr) {
+        return arr.sort(() => Math.random() - 0.5);
+      }
+      function loadLevel() {
+        const level = levels[currentLevel];
+        document.getElementById('level').textContent = `Level: ${currentLevel + 1}`;
+        const emojis = Object.keys(level.pairs);
+        const words = Object.values(level.pairs);
+        matched = {};
+        selected = null;
+        const emojiShuffled = shuffle([...emojis]);
+        const wordShuffled = shuffle([...words]);
+        const emojiSection = document.getElementById('emoji-section');
+        const wordSection = document.getElementById('word-section');
+        emojiSection.innerHTML = '';
+        wordSection.innerHTML = '';
+        emojiShuffled.forEach(emoji => {
+          const div = document.createElement('div');
+          div.className = 'item';
+          div.textContent = emoji;
+          div.onclick = () => handleSelect(emoji, 'emoji', div);
+          emojiSection.appendChild(div);
+        });
+        wordShuffled.forEach(word => {
+          const div = document.createElement('div');
+          div.className = 'item';
+          div.textContent = word;
+          div.onclick = () => handleSelect(word, 'word', div);
+          wordSection.appendChild(div);
+        });
+      }
+      let selectedItem = null;
+      let selectedType = null;
+      function handleSelect(value, type, element) {
+        if (matched[value]) return;
+        if (selectedItem === null) {
+          selectedItem = value;
+          selectedType = type;
+          element.classList.add('selected');
+        } else if (selectedType !== type) {
+          const level = levels[currentLevel];
+          let emoji, word;
+          if (type === 'emoji') {
+            emoji = value;
+            word = selectedItem;
+          } else {
+            emoji = selectedItem;
+            word = value;
+          }
+          if (level.pairs[emoji] === word) {
+            matched[emoji] = true;
+            matched[word] = true;
+            document.querySelectorAll('.item').forEach(div => {
+              if (div.textContent === emoji || div.textContent === word) {
+                div.classList.add('correct');
+                div.classList.remove('selected');
+              }
+            });
+            score++;
+            document.getElementById('score').textContent = `Score: ${score}`;
+            if (Object.keys(matched).length / 2 === Object.keys(level.pairs).length) {
+              if (currentLevel < levels.length - 1) {
+                currentLevel++;
+                setTimeout(loadLevel, 1000);
+              } else {
+                document.getElementById('result').style.display = 'block';
+                document.getElementById('restartBtn').style.display = 'inline-block';
+              }
+            }
+          } else {
+            document.querySelectorAll('.item.selected').forEach(div => div.classList.remove('selected'));
+          }
+          selectedItem = null;
+          selectedType = null;
+        }
+      }
+      function restartGame() {
+        currentLevel = 0;
+        score = 0;
+        document.getElementById('score').textContent = 'Score: 0';
+        document.getElementById('result').style.display = 'none';
+        document.getElementById('restartBtn').style.display = 'none';
+        loadLevel();
+      }
+      loadLevel();
+    </script>
   </section>
 
   <section id="contact">

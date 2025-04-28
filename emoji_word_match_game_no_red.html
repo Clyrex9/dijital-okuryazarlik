@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Emoji Word Match Game</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin: 0; padding: 20px; }
+    .section { margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+    .item { display: flex; align-items: center; justify-content: center; margin: 0; padding: 18px 20px; border: 2px solid #ccc; border-radius: 10px; cursor: pointer; font-size: 24px; min-width: 70px; min-height: 40px; background: #fff; transition: box-shadow 0.2s; }
+    .item:hover { box-shadow: 0 0 8px #b7d2f7; }
+    .selected { border-color: blue; background-color: #eef; }
+    .correct { background-color: #8f8 !important; border-color: green !important; }
+    #result { margin-top: 30px; font-size: 24px; display: none; }
+    #score, #level { font-size: 20px; margin: 10px; }
+    #restartBtn { display: none; margin-top: 20px; padding: 10px 20px; font-size: 18px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Emoji Word Match Game</h1>
+  <div id="score">Score: 0</div>
+  <div id="level">Level: 1</div>
+
+  <div class="section" id="emoji-section"></div>
+  <div class="section" id="word-section"></div>
+
+  <div id="result">Good job!</div>
+  <button id="restartBtn" onclick="restartGame()">Play Again</button>
+
+  <script>
+    const levels = [
+      { pairs: { '🛡️': 'güvenlik', '🔒': 'şifre', '👣': 'dijital ayak izi' } },
+      { pairs: { '📰': 'haber', '🕵️‍♂️': 'doğrulama', '🌐': 'internet' } },
+      { pairs: { '👤': 'gizlilik', '💻': 'bilgisayar', '📧': 'e-posta' } },
+      { pairs: { '📱': 'akıllı telefon', '🧑‍💻': 'siber güvenlik', '🔍': 'araştırma' } },
+      { pairs: { '📷': 'fotoğraf', '🗑️': 'çöp', '🧑‍🎓': 'eğitim' } },
+      { pairs: { '🔗': 'bağlantı', '📊': 'veri', '🧑‍⚖️': 'etik' } },
+      { pairs: { '🛑': 'tehlike', '❓': 'soru', '🗝️': 'anahtar' } },
+      { pairs: { '💬': 'mesaj', '🖼️': 'görsel', '📂': 'dosya' } },
+      { pairs: { '📢': 'paylaşım', '🧑‍🏫': 'bilgilendirme', '🧑‍🤝‍🧑': 'topluluk' } },
+      { pairs: { '🔎': 'arama', '🧑‍🔬': 'analiz', '🧑‍🚀': 'keşif' } }
+    ];
+
+    let currentLevel = 0;
+    let selected = null;
+    let score = 0;
+    let matched = {};
+
+    function shuffle(arr) {
+      return arr.sort(() => Math.random() - 0.5);
+    }
+
+    function loadLevel() {
+      const level = levels[currentLevel];
+      document.getElementById('level').textContent = `Level: ${currentLevel + 1}`;
+      const emojis = Object.keys(level.pairs);
+      const words = Object.values(level.pairs);
+      matched = {};
+      selected = null;
+      // Emojiler ve kelimeleri tek bir diziye koyup karıştır
+      const mixedItems = shuffle([
+        ...emojis.map(e => ({ type: 'emoji', value: e })),
+        ...words.map(w => ({ type: 'word', value: w }))
+      ]);
+      const emojiSection = document.getElementById('emoji-section');
+      const wordSection = document.getElementById('word-section');
+      // Grid görünümü için sadece bir bölümde göster
+      emojiSection.innerHTML = '';
+      wordSection.innerHTML = '';
+      mixedItems.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'item';
+        div.textContent = item.value;
+        div.onclick = () => handleSelect(item.value, item.type, div);
+        emojiSection.appendChild(div);
+      });
+      // wordSection boş kalacak, sadece gridde gösterilecek
+    }
+
+    let selectedItem = null;
+    let selectedType = null;
+
+    function handleSelect(value, type, element) {
+      if (matched[value]) return;
+
+      if (!selectedItem) {
+        selectedItem = { value, type, element };
+        element.classList.add('selected');
+      } else {
+        if (selectedItem.type === type) {
+          selectedItem.element.classList.remove('selected');
+          selectedItem = { value, type, element };
+          element.classList.add('selected');
+          return;
+        }
+
+        const emoji = type === 'emoji' ? value : selectedItem.value;
+        const word = type === 'word' ? value : selectedItem.value;
+
+        const correct = levels[currentLevel].pairs[emoji] === word;
+
+        if (correct) {
+          selectedItem.element.classList.remove('selected');
+          selectedItem.element.classList.add('correct');
+          element.classList.add('correct');
+          matched[emoji] = true;
+          matched[word] = true;
+          score += 10;
+        } else {
+          selectedItem.element.classList.remove('selected');
+          //element.classList.remove('selected');
+          //setTimeout(() => {
+            //element.classList.remove('selected');
+          //}, 500);
+          score -= 10;
+          setTimeout(() => {
+            //element.classList.remove('selected');
+          }, 500);
+        }
+
+        document.getElementById('score').textContent = `Score: ${score}`;
+
+        selectedItem = null;
+
+        if (Object.keys(matched).length / 2 === Object.keys(levels[currentLevel].pairs).length) {
+          currentLevel++;
+          if (currentLevel < levels.length) {
+            setTimeout(loadLevel, 1000);
+          } else {
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('restartBtn').style.display = 'inline-block';
+          }
+        }
+      }
+    }
+
+    function restartGame() {
+      currentLevel = 0;
+      score = 0;
+      document.getElementById('score').textContent = `Score: ${score}`;
+      document.getElementById('result').style.display = 'none';
+      document.getElementById('restartBtn').style.display = 'none';
+      loadLevel();
+    }
+
+    loadLevel();
+  </script>
+</body>
+</html>
