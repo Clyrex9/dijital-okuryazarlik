@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Emoji Word Match Game</title>
+  <title>Emoji Tahmin Etme Oyunu</title>
   <style>
     body { font-family: Arial, sans-serif; text-align: center; margin: 0; padding: 20px; }
     .section { margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
@@ -17,15 +17,15 @@
   </style>
 </head>
 <body>
-  <h1>Emoji Word Match Game</h1>
-  <div id="score">Score: 0</div>
-  <div id="level">Level: 1</div>
+  <h1>Emoji Tahmin Etme Oyunu</h1>
+  <div id="score">Puan: 0</div>
+  <div id="level">Seviye: 1</div>
 
   <div class="section" id="emoji-section"></div>
   <div class="section" id="word-section"></div>
 
-  <div id="result">Good job!</div>
-  <button id="restartBtn" onclick="restartGame()">Play Again</button>
+  <div id="result">Tebrikler, başardınız!</div>
+  <button id="restartBtn" onclick="restartGame()">Tekrar Oyna</button>
 
   <script>
     const levels = [
@@ -52,19 +52,17 @@
 
     function loadLevel() {
       const level = levels[currentLevel];
-      document.getElementById('level').textContent = `Level: ${currentLevel + 1}`;
+      document.getElementById('level').textContent = `Seviye: ${currentLevel + 1}`;
       const emojis = Object.keys(level.pairs);
       const words = Object.values(level.pairs);
       matched = {};
       selected = null;
-      // Emojiler ve kelimeleri tek bir diziye koyup karıştır
       const mixedItems = shuffle([
         ...emojis.map(e => ({ type: 'emoji', value: e })),
         ...words.map(w => ({ type: 'word', value: w }))
       ]);
       const emojiSection = document.getElementById('emoji-section');
       const wordSection = document.getElementById('word-section');
-      // Grid görünümü için sadece bir bölümde göster
       emojiSection.innerHTML = '';
       wordSection.innerHTML = '';
       mixedItems.forEach(item => {
@@ -74,15 +72,12 @@
         div.onclick = () => handleSelect(item.value, item.type, div);
         emojiSection.appendChild(div);
       });
-      // wordSection boş kalacak, sadece gridde gösterilecek
     }
 
     let selectedItem = null;
     let selectedType = null;
-
     function handleSelect(value, type, element) {
       if (matched[value]) return;
-
       if (!selectedItem) {
         selectedItem = { value, type, element };
         element.classList.add('selected');
@@ -93,35 +88,27 @@
           element.classList.add('selected');
           return;
         }
-
         const emoji = type === 'emoji' ? value : selectedItem.value;
         const word = type === 'word' ? value : selectedItem.value;
-
         const correct = levels[currentLevel].pairs[emoji] === word;
-
         if (correct) {
-          selectedItem.element.classList.remove('selected');
-          selectedItem.element.classList.add('correct');
-          element.classList.add('correct');
           matched[emoji] = true;
           matched[word] = true;
+          document.querySelectorAll('.item').forEach(div => {
+            if (div.textContent === emoji || div.textContent === word) {
+              div.classList.add('correct');
+              div.classList.remove('selected');
+            }
+          });
           score += 10;
         } else {
           selectedItem.element.classList.remove('selected');
-          //element.classList.remove('selected');
-          //setTimeout(() => {
-            //element.classList.remove('selected');
-          //}, 500);
           score -= 10;
           setTimeout(() => {
-            //element.classList.remove('selected');
           }, 500);
         }
-
-        document.getElementById('score').textContent = `Score: ${score}`;
-
+        document.getElementById('score').textContent = `Puan: ${score}`;
         selectedItem = null;
-
         if (Object.keys(matched).length / 2 === Object.keys(levels[currentLevel].pairs).length) {
           currentLevel++;
           if (currentLevel < levels.length) {
@@ -133,16 +120,14 @@
         }
       }
     }
-
     function restartGame() {
       currentLevel = 0;
       score = 0;
-      document.getElementById('score').textContent = `Score: ${score}`;
+      document.getElementById('score').textContent = 'Puan: 0';
       document.getElementById('result').style.display = 'none';
       document.getElementById('restartBtn').style.display = 'none';
       loadLevel();
     }
-
     loadLevel();
   </script>
 </body>
